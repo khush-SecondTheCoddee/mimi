@@ -1,34 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mimi Search | Independent</title>
+    <title>Mimi Search | Independent & Fast</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        // Inline script to prevent "Dark Mode Flash" on load
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
 </head>
-<body class="bg-white text-gray-900 font-sans">
+<body class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen">
 
-    <div id="search-container" class="transition-all duration-500 flex flex-col items-center justify-center min-h-screen">
-        <h1 class="text-5xl font-extrabold mb-8">
-            <span class="text-indigo-600">Mimi</span><span class="text-gray-400">Search</span>
+    <nav class="p-4 flex justify-end items-center gap-4">
+        <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+            <i id="theme-icon" class="fas fa-moon text-xl"></i>
+        </button>
+    </nav>
+
+    <header id="hero" class="flex flex-col items-center pt-24 pb-8">
+        <h1 class="text-7xl font-black mb-8 tracking-tighter">
+            <span class="text-indigo-600">Mimi</span><span class="text-gray-300 dark:text-slate-700">Search</span>
         </h1>
         
-        <div class="w-full max-w-xl px-4">
-            <div class="relative flex items-center">
-                <input type="text" id="query" 
-                    class="w-full p-4 pl-12 rounded-2xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-indigo-400 focus:outline-none shadow-lg transition-all"
+        <div class="w-full max-w-2xl px-6 relative">
+            <div class="relative group">
+                <input type="text" id="searchInput" autocomplete="off"
+                    class="w-full h-14 pl-12 pr-24 rounded-2xl border-2 border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 shadow-xl transition-all text-lg"
                     placeholder="Search the independent web...">
-                <i class="fas fa-search absolute left-4 text-gray-400"></i>
-                <button onclick="runSearch()" class="ml-2 bg-indigo-600 text-white px-6 py-4 rounded-2xl hover:bg-indigo-700 font-bold">Search</button>
+                <i class="fas fa-search absolute left-4 top-4 text-gray-400"></i>
+                
+                <div id="autocomplete-box" class="absolute w-full mt-2 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl shadow-2xl hidden z-50 overflow-hidden">
+                    </div>
             </div>
-            <p class="text-center text-xs text-gray-400 mt-4">Powered by Brave Independent Index</p>
-        </div>
-    </div>
 
-    <main id="results-wrapper" class="max-w-4xl mx-auto px-6 py-10 hidden">
-        <div id="results-list" class="space-y-10">
-            </div>
+            <div id="history-container" class="mt-4 flex flex-wrap gap-2 justify-center">
+                </div>
+        </div>
+    </header>
+
+    <main id="results-area" class="max-w-4xl mx-auto px-6 hidden pb-20">
+        <div class="flex gap-4 border-b dark:border-slate-800 mb-8 text-sm font-medium">
+            <button onclick="changeTab('web')" class="pb-2 border-b-2 border-indigo-500 text-indigo-600">All</button>
+            <button onclick="changeTab('images')" class="pb-2 text-gray-500 hover:text-indigo-600">Images</button>
+        </div>
+        <div id="results-list" class="space-y-10"></div>
     </main>
 
     <script src="app.js"></script>
